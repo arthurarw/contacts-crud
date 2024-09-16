@@ -7,7 +7,6 @@ use App\Exceptions\UserNotFoundException;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class UserService
@@ -40,7 +39,6 @@ class UserService
         try {
             return $this->user->query()->create($data->toArray());
         } catch (Exception $e) {
-            dd($e);
             return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
