@@ -31,22 +31,9 @@ export const useUsersStore = defineStore("users", {
     },
     async store(params: StoreUser): Promise<void> {
       return await userGateway.store(params);
-    }
-    /*async store(params: StoreUser): Promise<void> {
-      await userGateway.store(params);
     },
-    async getByUuid(uuid: string): Promise<User> {
-      return await userGateway.getById(uuid);
+    async update(uuid: string, params: StoreUser): Promise<void> {
+      return await userGateway.update(uuid, params);
     },
-    async destroy(id: string): Promise<void> {
-      await userGateway.destroy(id);
-    },
-    async update(params: UpdateUser): Promise<void> {
-      await userGateway.update(params);
-    },
-    async clear(): Promise<void> {
-      this.users = [];
-      this.meta = undefined;
-    },*/
   },
 });

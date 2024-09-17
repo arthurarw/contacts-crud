@@ -105,7 +105,7 @@ const deleteUser = async (uuid: string) => {
                   <td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{{ user.birthday }}</td>
                   <td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                     <router-link :to="{ name: 'users.show', params: { uuid: user.uuid } }" class="text-blue-600 hover:text-blue-900">Show</router-link>
-                    <router-link :to="{ name: 'users.show', params: { uuid: user.uuid } }" class="ml-2 text-yellow-600 hover:text-yellow-900">Edit</router-link>
+                    <router-link :to="{ name: 'users.edit', params: { uuid: user.uuid } }" class="ml-2 text-yellow-600 hover:text-yellow-900">Edit</router-link>
                     <a href="#" @click.prevent="deleteUser(user.uuid)" class="ml-2 text-red-600 hover:text-red-900">Delete</a>
                   </td>
                 </tr>

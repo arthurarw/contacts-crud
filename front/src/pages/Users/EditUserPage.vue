@@ -2,11 +2,15 @@
 
 import { useUsersStore } from '@/stores/users';
 import { useForm } from 'vee-validate';
-import { StoreUser } from '@/interfaces/User';
+import { StoreUser, User } from '@/interfaces/User';
 import * as yup from 'yup';
 import router from '@/routes';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useToast } from "vue-toastification";
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+import { convertBrazilianDateToDate } from '@/utils/string';
+import { format } from 'date-fns';
 
 const userStore = useUsersStore();
 const toast = useToast();
@@ -23,17 +27,45 @@ const { values, defineField, errors } = useForm({
   validationSchema: schema,
 });
 
+const route = useRoute();
+const userUuid = computed(() => route.params.uuid.toString());
 const [name, nameAttrs] = defineField('name');
 const [email, emailAttrs] = defineField('email');
 const [phone, phoneAttrs] = defineField('phone');
 const [birthday, birthdayAttrs] = defineField('birthday');
 const formError = ref<string | null>(null);
 const loading = ref<boolean>(false);
+const user = ref<User | null>(null);
+
+onMounted(async () => {
+  loading.value = true;
+
+  await userStore.getUser(userUuid.value)
+    .then(response => {
+      let newDate = convertBrazilianDateToDate(response.birthday);
+      if (!newDate) {
+        newDate = new Date();
+      }
+
+      user.value = response;
+      name.value = response.name;
+      email.value = response.email;
+      phone.value = response.phone;
+      birthday.value = format(newDate, 'yyyy-MM-dd');
+    })
+    .catch(() => {
+      toast.error('Error to get user');
+      router.push({ name: 'home' });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+});
 
 const submitForm = async () => {
   formError.value = null;
   loading.value = true;
-  await userStore.store(values as unknown as StoreUser)
+  await userStore.update(userUuid.value, values as unknown as StoreUser)
     .then(_response => {
       toast.success('User saved successfully');
       router.push({ name: 'home' });
@@ -51,7 +83,7 @@ const submitForm = async () => {
 
 <template>
   <div class="container mx-auto">
-    <h1 class="mb-8 text-2xl font-bold">Create User</h1>
+    <h1 class="mb-8 text-2xl font-bold">Update User</h1>
     <form @submit.prevent="submitForm">
       <div class="mt-4 mb-4" v-if="formError">
         <span class="mt-2 text-xs font-bold text-red-500">{{ formError }}</span>

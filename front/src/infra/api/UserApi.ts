@@ -23,6 +23,11 @@ export default class UserApi {
     return response;
   }
 
+  async update(uuid: string, params: StoreUser): Promise<any> {
+    const response = await HttpAdapter.put(`/users/${uuid}`, params).then((response) => response.data).catch((error) => { throw error; });
+    return response;
+  }
+
   async getUser(uuid: string): Promise<User> {
     const response = await HttpAdapter
       .get(`/users/${uuid}`)
