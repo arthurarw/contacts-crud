@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\DTOs\User\StoreUserDto;
 use App\Helpers\PaginationHelper;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -36,6 +36,13 @@ class UserController extends Controller
     {
         $request->validated();
         $data = $this->service->store(StoreUserDto::makeFromRequest($request));
+        return new UserResource($data);
+    }
+
+    public function update(string $uuid, UpdateUserRequest $request)
+    {
+        $request->validated();
+        $data = $this->service->update($uuid, StoreUserDto::makeFromRequest($request));
         return new UserResource($data);
     }
 }

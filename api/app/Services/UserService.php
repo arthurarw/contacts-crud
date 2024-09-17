@@ -43,6 +43,22 @@ class UserService
         }
     }
 
+    public function update(string $uuid, StoreUserDto $data)
+    {
+        try {
+            $user = $this->user->query()->where('uuid', $uuid)->first();
+            if (!$user) {
+                throw new UserNotFoundException();
+            }
+
+            $user->update($data->toArray());
+            $user->refresh();
+            return $user;
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
+    }
+
     public function destroy(string $uuid): JsonResponse
     {
         try {

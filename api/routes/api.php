@@ -11,6 +11,6 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/', [UserController::class, 'store']);
     Route::get('/{uuid}', [UserController::class, 'show']);
-    Route::put('/{uuid}', [UserController::class, 'show']);
+    Route::put('/{uuid}', [UserController::class, 'update']);
     Route::delete('/{uuid}', [UserController::class, 'destroy']);
 });
